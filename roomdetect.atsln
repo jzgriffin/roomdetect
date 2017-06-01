@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Atmel Studio Solution File, Format Version 11.00
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "roomdetect_master", "roomdetect_master\roomdetect_master.cproj", "{ECF8FBDB-906E-4329-A4BA-5B48F2467790}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "roomdetect_compute", "roomdetect_compute\roomdetect_compute.cproj", "{C73927D6-71C5-42C4-A876-3DD00D5E2CFC}"
+EndProject
+Project("{54F91283-7BC4-4236-8FF9-10F437C3AD48}") = "roomdetect_common", "roomdetect_common\roomdetect_common.cproj", "{EB87A705-3BF5-4856-8621-B0155E436574}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|AVR = Debug|AVR
+		Release|AVR = Release|AVR
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ECF8FBDB-906E-4329-A4BA-5B48F2467790}.Debug|AVR.ActiveCfg = Debug|AVR
+		{ECF8FBDB-906E-4329-A4BA-5B48F2467790}.Debug|AVR.Build.0 = Debug|AVR
+		{ECF8FBDB-906E-4329-A4BA-5B48F2467790}.Release|AVR.ActiveCfg = Release|AVR
+		{ECF8FBDB-906E-4329-A4BA-5B48F2467790}.Release|AVR.Build.0 = Release|AVR
+		{C73927D6-71C5-42C4-A876-3DD00D5E2CFC}.Debug|AVR.ActiveCfg = Debug|AVR
+		{C73927D6-71C5-42C4-A876-3DD00D5E2CFC}.Debug|AVR.Build.0 = Debug|AVR
+		{C73927D6-71C5-42C4-A876-3DD00D5E2CFC}.Release|AVR.ActiveCfg = Release|AVR
+		{C73927D6-71C5-42C4-A876-3DD00D5E2CFC}.Release|AVR.Build.0 = Release|AVR
+		{EB87A705-3BF5-4856-8621-B0155E436574}.Debug|AVR.ActiveCfg = Debug|AVR
+		{EB87A705-3BF5-4856-8621-B0155E436574}.Debug|AVR.Build.0 = Debug|AVR
+		{EB87A705-3BF5-4856-8621-B0155E436574}.Release|AVR.ActiveCfg = Release|AVR
+		{EB87A705-3BF5-4856-8621-B0155E436574}.Release|AVR.Build.0 = Release|AVR
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
