@@ -121,7 +121,25 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="detection_task.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="detection_task.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mode_task.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="mode_task.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="training_task.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="training_task.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
