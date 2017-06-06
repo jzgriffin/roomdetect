@@ -50,5 +50,5 @@ accum read_adc_voltage()
 
 accum adc_to_volts(uint16_t r)
 {
-    return bitsk(r) * bitsk(ADC_VOLTAGE) / bitsk(ADC_DIVISOR);
+    return (accum)(r * ADC_VOLTAGE) / ADC_DIVISOR;
 }
