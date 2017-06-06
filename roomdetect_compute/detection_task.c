@@ -78,7 +78,12 @@ static task_state_t tick(task_state_t state)
             break;
 
         case STATE_DETECT:
-            state = STATE_READY;
+            if (device_mode != DEVICE_MODE_DETECTION) {
+                state = STATE_DISABLED;
+            }
+            else {
+                state = STATE_READY;
+            }
             break;
 
         case STATE_CHECK_PACKET:
