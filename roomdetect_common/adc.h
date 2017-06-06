@@ -9,7 +9,14 @@
 #define CUSTOM_COMMON_ADC_H
 
 #include <stdbool.h>
+#include <stdfix.h>
 #include <stdint.h>
+
+/// \brief Divisor for the maximum reading produced by the ADC
+#define ADC_DIVISOR 0x03FF
+
+/// \brief Reference voltage used in the ADC circuit
+#define ADC_VOLTAGE 5
 
 /// \brief Pins that can be used with ADC
 typedef enum {
@@ -40,5 +47,17 @@ bool is_adc_ready();
 /// \brief Gets the last ADC conversion reading
 /// \return 10-bit ADC reading
 uint16_t read_adc();
+
+/// \brief Gets the last ADC conversion reading in volts
+/// \return voltage from ADC reading
+/// \see adc_to_volts
+accum read_adc_voltage();
+
+/// \brief Converts the given ADC conversion reading to volts
+/// \param r 10-bit ADC reading
+/// \return \p r in volts
+/// \see ADC_BITS
+/// \see ADC_VOLTAGE
+accum adc_to_volts(uint16_t r);
 
 #endif // CUSTOM_COMMON_ADC_H

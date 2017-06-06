@@ -16,7 +16,7 @@
 #include <string.h>
 
 #define BUTTON_REPEAT_TICKS (500 / training_task.period)
-#define MAX_TRAINING_ROOM UINT8_MAX
+#define MAX_TRAINING_ROOM 0x0F
 
 enum {
     CONFIRM_PIN = PIN3,

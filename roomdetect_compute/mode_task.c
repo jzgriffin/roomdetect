@@ -83,6 +83,7 @@ static task_state_t tick(task_state_t state)
     switch (state) {
         case STATE_CONFIGURE:
             device_mode = DEVICE_MODE_DETECTION;
+            // TODO: Load model from EEPROM
             break;
 
         case STATE_DISCARD_PACKET:
@@ -114,3 +115,4 @@ task_t mode_task = {
     16,            // Millisecond period
 };
 device_mode_t device_mode;
+model_t model;

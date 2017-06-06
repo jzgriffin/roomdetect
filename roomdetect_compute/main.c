@@ -8,6 +8,7 @@
 
 #include "detection_task.h"
 #include "mode_task.h"
+#include "reading_task.h"
 #include "training_task.h"
 #include "schedule.h"
 #include "usart_packet_rx_task.h"
@@ -20,6 +21,7 @@ int main()
     schedule_task(&usart_rx_task);
     schedule_task(&usart_packet_rx_task);
     schedule_task(&mode_task);
+    schedule_task(&reading_task);
     schedule_task(&detection_task);
     schedule_task(&training_task);
     run_schedule();

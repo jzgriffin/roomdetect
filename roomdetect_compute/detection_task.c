@@ -8,6 +8,7 @@
 
 #include "detection_task.h"
 #include "mode_task.h"
+#include "reading_task.h"
 #include "usart_packet_rx_task.h"
 #include "usart_tx_task.h"
 
@@ -18,6 +19,7 @@ enum {
     STATE_STANDBY,
     STATE_ENABLED,
     STATE_READY,
+    STATE_DETECT,
     STATE_CHECK_PACKET,
     STATE_DISCARD_PACKET,
     STATE_RECEIVE_SAVE,
@@ -33,8 +35,6 @@ static bool send_detection_packet(uint8_t room)
 
 static task_state_t tick(task_state_t state)
 {
-    static uint16_t tick_count;
-
     // Transitions
     switch (state) {
         case STATE_INITIAL:
@@ -69,9 +69,16 @@ static task_state_t tick(task_state_t state)
             else if (!is_usart_packet_rx_queue_empty()) {
                 state = STATE_CHECK_PACKET;
             }
+            else if (are_readings_ready) {
+                state = STATE_DETECT;
+            }
             else {
                 state = STATE_READY;
             }
+            break;
+
+        case STATE_DETECT:
+            state = STATE_READY;
             break;
 
         case STATE_CHECK_PACKET:
@@ -128,24 +135,25 @@ static task_state_t tick(task_state_t state)
     // Actions
     switch (state) {
         case STATE_CONFIGURE:
-            detected_room = 0;
+            detected_room = 0xFF;
             break;
-
+            
         case STATE_DISABLED:
-            // TODO: Stop detection
-            break;
-
-        case STATE_ENABLED:
-            // TODO: Begin detection
+            detected_room = 0xFF;
             break;
 
         case STATE_READY:
-            ++tick_count;
-            if (tick_count == 100) {
-                send_detection_packet(detected_room++);
-                tick_count = 0;
+            should_poll_readings = true;
+            break;
+
+        case STATE_DETECT: {
+            uint8_t room = classify_model(&model, reading_vector);
+            if (room != 0xFF && room != detected_room) {
+                detected_room = room;
+                send_detection_packet(detected_room);
             }
             break;
+        }            
 
         case STATE_DISCARD_PACKET:
             pop_usart_packet_rx_queue();
@@ -163,7 +171,7 @@ static task_state_t tick(task_state_t state)
 
         case STATE_RECEIVE_ERASE:
             pop_usart_packet_rx_queue();
-            // TODO: Erase in EEPROM
+            clear_model(&model);
             break;
 
         default:

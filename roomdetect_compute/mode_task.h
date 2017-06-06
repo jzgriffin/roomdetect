@@ -9,6 +9,7 @@
 #ifndef CUSTOM_COMPUTE_MODE_TASK_H
 #define CUSTOM_COMPUTE_MODE_TASK_H
 
+#include "model.h"
 #include "task.h"
 #include <stdint.h>
 
@@ -23,5 +24,8 @@ extern task_t mode_task;
 
 /// \brief Mode the device is in
 extern device_mode_t device_mode;
+
+/// \brief Model to use for detection and training
+extern model_t model;
 
 #endif // CUSTOM_COMPUTE_MODE_TASK_H

@@ -8,6 +8,7 @@
 
 #include "training_task.h"
 #include "mode_task.h"
+#include "reading_task.h"
 
 enum {
     STATE_INITIAL,
@@ -16,6 +17,7 @@ enum {
     STATE_STANDBY,
     STATE_ENABLED,
     STATE_READY,
+    STATE_TRAIN,
 };
 
 static task_state_t tick(task_state_t state)
@@ -51,9 +53,16 @@ static task_state_t tick(task_state_t state)
             if (device_mode != DEVICE_MODE_TRAINING) {
                 state = STATE_DISABLED;
             }
+            if (are_readings_ready) {
+                state = STATE_TRAIN;
+            }
             else {
                 state = STATE_READY;
             }
+            break;
+
+        case STATE_TRAIN:
+            state = STATE_READY;
             break;
 
         default:
@@ -67,12 +76,12 @@ static task_state_t tick(task_state_t state)
             training_room = 0;
             break;
 
-        case STATE_DISABLED:
-            // TODO: Begin training
+        case STATE_READY:
+            should_poll_readings = true;
             break;
 
-        case STATE_ENABLED:
-            // TODO: Stop training
+        case STATE_TRAIN:
+            update_room(&model.rooms[training_room], reading_vector);
             break;
 
         default:

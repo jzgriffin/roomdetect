@@ -42,3 +42,13 @@ uint16_t read_adc()
 {
     return ADC;
 }
+
+accum read_adc_voltage()
+{
+    return adc_to_volts(read_adc());
+}
+
+accum adc_to_volts(uint16_t r)
+{
+    return bitsk(r) * bitsk(ADC_VOLTAGE) / bitsk(ADC_DIVISOR);
+}
