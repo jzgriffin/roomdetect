@@ -29,7 +29,12 @@ void update_vector(vector_t *v, accum x)
     v->samples = n;
     v->mean = mean;
     v->var = var;
-    v->stdev = (accum)sqrt((double)(var / (accum)n));
+    if (n < 2) {
+        v->stdev = (accum)sqrt((double)(var / (accum)n));
+    }
+    else {
+        v->stdev = (accum)sqrt((double)(var / (accum)(n - 1)));
+    }
 }
 
 accum score_vector(const vector_t *v, accum x)
@@ -63,9 +68,10 @@ accum score_room(const room_t *r, const accum *x)
     }
     accum z = 0K;
     for (size_t i = 0; i < MODEL_VECTOR_SIZE; ++i) {
-        z += absk(score_vector(&r->vectors[i], x[i]));
+        accum zi = score_vector(&r->vectors[i], x[i]);
+        z += zi * zi;
     }
-    return z;
+    return (accum)sqrt((double)(z / (accum)MODEL_VECTOR_SIZE));
 }
 
 void clear_model(model_t *m)
