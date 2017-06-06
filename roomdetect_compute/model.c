@@ -9,6 +9,7 @@
 #include "model.h"
 #include "numeric.h"
 #include <math.h>
+#include <avr/eeprom.h>
 
 void clear_vector(vector_t *v)
 {
@@ -72,6 +73,16 @@ void clear_model(model_t *m)
     for (size_t i = 0; i < MODEL_ROOMS_MAX; ++i) {
         clear_room(&m->rooms[i]);
     }
+}
+
+void write_model_eeprom(const model_t *m, model_t *a)
+{
+    eeprom_update_block(m, a, sizeof(*m));
+}
+
+void read_model_eeprom(model_t *m, const model_t *a)
+{
+    eeprom_read_block(m, a, sizeof(*m));
 }
 
 size_t classify_model(const model_t *m, const accum *x)

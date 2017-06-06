@@ -166,12 +166,12 @@ static task_state_t tick(task_state_t state)
 
         case STATE_RECEIVE_SAVE:
             pop_usart_packet_rx_queue();
-            // TODO: Save to EEPROM
+            write_model_eeprom(&model, &model_eeprom);
             break;
 
         case STATE_RECEIVE_RESET:
             pop_usart_packet_rx_queue();
-            // TODO: Reset from EEPROM
+            read_model_eeprom(&model, &model_eeprom);
             break;
 
         case STATE_RECEIVE_ERASE:

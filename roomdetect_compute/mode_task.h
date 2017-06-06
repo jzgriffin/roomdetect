@@ -11,6 +11,7 @@
 
 #include "model.h"
 #include "task.h"
+#include <avr/eeprom.h>
 #include <stdint.h>
 
 /// \brief Modes for the device to be in
@@ -27,5 +28,8 @@ extern device_mode_t device_mode;
 
 /// \brief Model to use for detection and training
 extern model_t model;
+
+/// \brief Location to store the model in EEPROM
+extern EEMEM model_t model_eeprom;
 
 #endif // CUSTOM_COMPUTE_MODE_TASK_H

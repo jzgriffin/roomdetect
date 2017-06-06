@@ -72,6 +72,20 @@ accum score_room(const room_t *r, const accum *x);
 /// \param m model to clear
 void clear_model(model_t *m);
 
+/// \brief Writes a model from SRAM into EEPROM
+/// \param m address of the target model in SRAM
+/// \param a address of the source model in EEPROM
+///
+/// This function halts interrupts and may take a long time to return.
+void write_model_eeprom(const model_t *m, model_t *a);
+
+/// \brief Reads a model from EEPROM into SRAM
+/// \param m address of the target model in SRAM
+/// \param a address of the source model in EEPROM
+///
+/// This function halts interrupts and may take a long time to return.
+void read_model_eeprom(model_t *m, const model_t *a);
+
 /// \brief Classifies a reading vector to the closest trained room
 /// \param m model to classify against
 /// \param x vector of readings to classify

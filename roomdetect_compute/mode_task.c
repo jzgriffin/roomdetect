@@ -116,3 +116,4 @@ task_t mode_task = {
 };
 device_mode_t device_mode;
 model_t model;
+EEMEM model_t model_eeprom;
