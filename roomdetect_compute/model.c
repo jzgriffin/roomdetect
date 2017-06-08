@@ -93,7 +93,7 @@ void read_model_eeprom(model_t *m, const model_t *a)
 
 size_t classify_model(const model_t *m, const accum *x)
 {
-    size_t i_close = 0xFF;
+    size_t i_close = UINT8_MAX;
     accum z_close = ACCUM_MAX;
     for (size_t i = 0; i < MODEL_ROOMS_MAX; ++i) {
         if (m->rooms[i].samples == 0) {

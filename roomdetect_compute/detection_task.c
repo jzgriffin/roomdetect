@@ -140,11 +140,11 @@ static task_state_t tick(task_state_t state)
     // Actions
     switch (state) {
         case STATE_CONFIGURE:
-            detected_room = 0xFF;
+            detected_room = UINT8_MAX;
             break;
             
         case STATE_DISABLED:
-            detected_room = 0xFF;
+            detected_room = UINT8_MAX;
             break;
 
         case STATE_READY:
