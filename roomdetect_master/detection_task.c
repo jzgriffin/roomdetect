@@ -213,8 +213,6 @@ static task_state_t tick(task_state_t state)
             // Map the ports
             DDRA &= ~BUTTONS_MASK;
             PORTA |= BUTTONS_MASK;
-
-            detected_room = 0;
             break;
 
         case STATE_ENABLED:
@@ -222,6 +220,7 @@ static task_state_t tick(task_state_t state)
             lcd_position = 0;
             should_lcd_clear = true;
             should_lcd_write = true;
+            detected_room = UINT8_MAX;
             break;
 
         case STATE_SAVE:
