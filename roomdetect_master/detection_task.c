@@ -233,6 +233,7 @@ static task_state_t tick(task_state_t state)
 
         case STATE_ERASE:
             send_erase_packet();
+            clear_usart_packet_rx_queue();
             should_display_erase = true;
             break;
 

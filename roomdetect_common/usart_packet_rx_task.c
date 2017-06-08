@@ -213,6 +213,13 @@ usart_packet_t pop_usart_packet_rx_queue()
     return data;
 }
 
+void clear_usart_packet_rx_queue()
+{
+    usart_packet_rx_queue_size = 0;
+    usart_packet_rx_queue_head = 0;
+    usart_packet_rx_queue_tail = 0;
+}
+
 task_t usart_packet_rx_task = {
     STATE_INITIAL, // Initial state
     tick,          // Tick function

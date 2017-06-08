@@ -54,4 +54,7 @@ const usart_packet_t *peek_usart_packet_rx_queue();
 /// If the queue is empty, an empty packet is returned.
 usart_packet_t pop_usart_packet_rx_queue();
 
+/// \brief Clears all packets from the USART receiver queue
+void clear_usart_packet_rx_queue();
+
 #endif // CUSTOM_COMMON_USART_PACKET_RX_TASK_H
