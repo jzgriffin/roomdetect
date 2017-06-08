@@ -19,9 +19,9 @@
 #define MAX_TRAINING_ROOM 0x0F
 
 enum {
-    CONFIRM_PIN = PIN3,
-    INC_PIN = PIN4,
-    DEC_PIN = PIN5,
+    CONFIRM_PIN = PIN1,
+    INC_PIN = PIN2,
+    DEC_PIN = PIN3,
 
     BUTTONS_MASK =
         _BV(CONFIRM_PIN) |

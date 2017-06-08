@@ -19,8 +19,8 @@
 #define ERASE_HOLD_TICKS (3000 / detection_task.period)
 
 enum {
-    SAVE_PIN = PIN1,
-    RESET_PIN = PIN2,
+    SAVE_PIN = PIN2,
+    RESET_PIN = PIN3,
 
     BUTTONS_MASK =
         _BV(SAVE_PIN) |
