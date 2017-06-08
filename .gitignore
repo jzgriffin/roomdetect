@@ -1,5 +1,8 @@
+*.atsuo
 *.aux
 *.lof
 *.log
 *.lot
 *.toc
+Debug/
+Release/
