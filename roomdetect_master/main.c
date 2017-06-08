@@ -7,6 +7,7 @@
 // code, is my own original work.
 
 #include "detection_task.h"
+#include "display_task.h"
 #include "mode_task.h"
 #include "training_task.h"
 #include "lcd_task.h"
@@ -25,5 +26,6 @@ int main()
     schedule_task(&mode_task);
     schedule_task(&detection_task);
     schedule_task(&training_task);
+    schedule_task(&display_task);
     run_schedule();
 }

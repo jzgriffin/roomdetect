@@ -7,14 +7,12 @@
 // code, is my own original work.
 
 #include "detection_task.h"
+#include "display_task.h"
 #include "mode_task.h"
 #include "bit.h"
-#include "lcd_task.h"
 #include "usart_packet_rx_task.h"
 #include "usart_tx_task.h"
 #include <avr/io.h>
-#include <stdio.h>
-#include <string.h>
 
 #define ERASE_HOLD_TICKS (3000 / detection_task.period)
 
@@ -216,27 +214,17 @@ static task_state_t tick(task_state_t state)
             break;
 
         case STATE_ENABLED:
-            strcpy(lcd_buffer, "Detection");
-            lcd_position = 0;
-            should_lcd_clear = true;
-            should_lcd_write = true;
             detected_room = UINT8_MAX;
             break;
 
         case STATE_SAVE:
             send_save_packet();
-            sprintf(lcd_buffer, "Saved network   to EEPROM");
-            lcd_position = 0;
-            should_lcd_clear = true;
-            should_lcd_write = true;
+            should_display_save = true;
             break;
 
         case STATE_RESET:
             send_reset_packet();
-            sprintf(lcd_buffer, "Reset network   from EEPROM");
-            lcd_position = 0;
-            should_lcd_clear = true;
-            should_lcd_write = true;
+            should_display_reset = true;
             break;
 
         case STATE_RESET_HOLD:
@@ -245,10 +233,7 @@ static task_state_t tick(task_state_t state)
 
         case STATE_ERASE:
             send_erase_packet();
-            sprintf(lcd_buffer, "Erased network  in RAM");
-            lcd_position = 0;
-            should_lcd_clear = true;
-            should_lcd_write = true;
+            should_display_erase = true;
             break;
 
         case STATE_DISCARD_PACKET:
@@ -258,10 +243,6 @@ static task_state_t tick(task_state_t state)
         case STATE_RECEIVE_DETECTION: {
             usart_packet_t packet = pop_usart_packet_rx_queue();
             detected_room = packet.data[1];
-            sprintf(lcd_buffer, "Detected room   %d", detected_room);
-            lcd_position = 0;
-            should_lcd_clear = true;
-            should_lcd_write = true;
             break;
         }
 

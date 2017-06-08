@@ -136,6 +136,12 @@
     <Compile Include="mode_task.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="display_task.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display_task.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="training_task.c">
       <SubType>compile</SubType>
     </Compile>

@@ -9,11 +9,8 @@
 #include "training_task.h"
 #include "mode_task.h"
 #include "bit.h"
-#include "lcd_task.h"
 #include "usart_tx_task.h"
 #include <avr/io.h>
-#include <stdio.h>
-#include <string.h>
 
 #define BUTTON_REPEAT_TICKS (500 / training_task.period)
 #define MAX_TRAINING_ROOM 0x0F
@@ -227,30 +224,17 @@ static task_state_t tick(task_state_t state)
         case STATE_ENABLED:
             training_room = 0;
             is_training = false;
-
-            sprintf(lcd_buffer, "Train room: %d", training_room);
-            lcd_position = 0;
-            should_lcd_clear = true;
-            should_lcd_write = true;
             break;
 
         case STATE_INC:
             if (training_room < MAX_TRAINING_ROOM) {
                 ++training_room;
-                sprintf(lcd_buffer, "Train room: %d", training_room);
-                lcd_position = 0;
-                should_lcd_clear = true;
-                should_lcd_write = true;
             }
             break;
 
         case STATE_DEC:
             if (training_room > 0) {
                 --training_room;
-                sprintf(lcd_buffer, "Train room: %d", training_room);
-                lcd_position = 0;
-                should_lcd_clear = true;
-                should_lcd_write = true;
             }
             break;
 
@@ -262,10 +246,6 @@ static task_state_t tick(task_state_t state)
         case STATE_CONFIRM:
             send_start_training_packet(training_room);
             is_training = true;
-            sprintf(lcd_buffer, "Training room   %d...", training_room);
-            lcd_position = 0;
-            should_lcd_clear = true;
-            should_lcd_write = true;
             break;
 
         default:
