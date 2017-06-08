@@ -1,0 +1,191 @@
+\documentclass{article}
+
+\title{Report: Room Detector}
+\author{Jeremiah Griffin}
+\date{Spring 2017}
+
+\begin{document}
+
+\pagenumbering{gobble}
+\maketitle
+\newpage
+
+\pagenumbering{roman}
+\tableofcontents
+\listoffigures
+\listoftables
+\newpage
+
+\pagenumbering{arabic}
+
+\section{Introduction}
+
+The room detector uses inputs from several sensors to determine what
+room or environment the device is currently in.  It uses a statistical
+model to associate ambient factors with a user-defined room number.  The
+network must be trained by the user before it may be used.  This is done
+online by placing the device in each room to be detected, entering
+training mode, associating either a new or existing room number with the
+training data, and then moving the device through the room.  The longer
+the device is trained, the more accurate its classifications become.
+Once training is complete, the device may enter detection mode and be
+moved between any of the trained rooms.  If brought to an untrained
+room, it will make its best guess at classifying the room as one that
+was trained.
+
+% TODO: Insert photo of project
+
+\section{Hardware}
+
+\subsection{Parts}
+
+The hardware components that were used in this project are listed below.
+The equipment that was not taught as part of the course material is
+listed in bold.
+
+\begin{table}[h!]
+  \centering
+  \begin{tabular}{llr}
+    Part Number & Component & Quantity \\
+    \hline
+    ATmega1284p             & Microcontroller                  & 2 \\
+                            & SPDT toggle switch               & 1 \\
+                            & SPST push-down button            & 3 \\
+                            & 10K\Omega\ trimmer potentiometer & 1 \\
+                            & 330\Omega\ 10\% resistor         & 4 \\
+                            & CdS photoresistor                & 1 \\
+    LCM-S01602DTR/M         & Liquid crystal display           & 1 \\
+    \textbf{TMP36}          & Temperature sensor               & 1 \\
+    \textbf{CMA-4544PF-W}   & Electret microphone              & 1 \\
+    \textbf{MAX9814}        & Microphone amplifier             & 1
+  \end{tabular}
+  \caption{Listing of parts used in design}
+  \label{table:1}
+\end{table}
+
+\subsection{Pinout}
+
+\section{Software}
+
+The software designed for this project was implemented using the PES
+standard.  The overall design as a task diagram is included below.
+
+% TODO: Insert task diagram
+
+In the following sections, the individual tasks from the above diagram
+are briefly described in addition to their inputs and outputs.  The
+state machines for these tasks are presented in the appendix.
+% TODO: Reference appendix section
+
+\subsection{Tasks}
+
+\section{Complexities}
+
+\subsection{Complete}
+
+\begin{itemize}
+
+  \item Using EEPROM to persist the classification model state
+
+  \item Using USART to offload computation to a dedicated
+    microcontroller
+
+  \item Using ADC multiplexing to collect analog readings from multiple
+    sensors
+
+  \item Using a temperature sensor and microphone obtained outside of
+    the lab kit
+
+  \item Using a statistical model to perform input classification using
+    fixed-point arithmetic
+
+\end{itemize}
+
+\subsection{Incomplete}
+
+\begin{itemize}
+
+  \item Using a neural network to perform input classification using
+    fixed-point arithmetic
+    % TODO: Explain why this was not completed
+
+\end{itemize}
+
+\section{Links}
+
+\begin{description}
+
+  %\item [Demonstration Video] https://youtu.be/%TODO
+
+  \item [GitHub Repository] https://github.com/nokurn/roomdetect
+
+\end{description}
+
+\section{Known Issues}
+
+\begin{itemize}
+
+  \item The classification algorithm does not cope well with noise and
+    may confuse environments with a large degree of noise as being
+    equivalent regardless of the specifics of that noise.
+
+  \item The temperature sensor is not measured with sufficient precision
+    for its readings to adequately influence the results of the
+    classification.
+
+  \item The microphone primarily distinguishes between noisy and quiet
+    environments with no consideration of the qualities of the sound
+    such as timbre and pitch.
+
+  \item The classifier most heavily relies on the measurements from the
+    photo-resistor, despite unbiased treatment of all readings in the
+    input vector.  This is likely due to the aforementioned reasons:
+    low analog precision and the need for pre-processing of some
+    readings.
+
+\end{itemize}
+
+\section{Future Work}
+
+\begin{itemize}
+
+  \item The largest improvement might come from replacing the compute
+    microcontroller with a higher-power compute unit, possibly
+    integrating floating-point arithmetic, and using a more robust
+    classification model such as a neural network.
+
+  \item By using an external analog-digital converter with higher
+    precision, or simply replacing the ATmega with a microcontroller
+    with a higher-precision integrated ADC, sensors with small output
+    ranges would contribute more to the accuracy and confidence of the
+    device's classifications.  This would reflect immediately in the
+    ability of the device to distinguish between environments with
+    slightly different temperatures.
+
+  \item Applying a Fourier transform to the microphone signal and using
+    the individual components as input to the classifier would improve
+    the quality of classifications with regard to environmental sounds.
+    For example, if one room contains several computers with spinning
+    fans and another room has a single ceiling fan, yet the volume level
+    in both rooms is similar, a Fourier analysis of the sound waves
+    would enable the classifier to distinguish between the two by the
+    timbre and pitch of the sound in addition to its loudness.
+
+  \item Adding additional sensors would increase the size of the
+    classifier's feature vector and its accuracy.  Barometric pressure,
+    humidity, altitude, or even GPS would be likely candidates for
+    inclusion in the system.
+
+\end{itemize}
+
+\appendix
+
+\section{Appendix: State Machines}
+
+\subsection{Master Microcontroller}
+
+\subsection{Compute Microcontroller}
+
+\subsection{Common Infrastructure}
+
+\end{document}
