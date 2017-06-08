@@ -278,7 +278,7 @@ static task_state_t tick(task_state_t state)
 task_t training_task = {
     STATE_INITIAL, // Initial state
     tick,          // Tick function
-    50,            // Millisecond period
+    20,            // Millisecond period
 };
 uint8_t training_room;
 bool is_training;

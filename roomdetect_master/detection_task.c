@@ -275,6 +275,6 @@ static task_state_t tick(task_state_t state)
 task_t detection_task = {
     STATE_INITIAL, // Initial state
     tick,          // Tick function
-    50,            // Millisecond period
+    20,            // Millisecond period
 };
 uint8_t detected_room;
