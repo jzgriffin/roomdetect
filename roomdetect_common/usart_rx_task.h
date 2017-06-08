@@ -60,4 +60,7 @@ uint8_t pop_usart_rx_queue();
 /// and the pop succeeded; \c false otherwise
 bool pop_usart_rx_queue_array(uint8_t *data, size_t size);
 
+/// \brief Clears all packets from the USART receiver queue
+void clear_usart_rx_queue();
+
 #endif // CUSTOM_COMMON_USART_RX_TASK_H

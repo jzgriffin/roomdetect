@@ -119,6 +119,13 @@ bool pop_usart_rx_queue_array(uint8_t *data, size_t size)
     return true;
 }
 
+void clear_usart_rx_queue()
+{
+    usart_rx_queue_size = 0;
+    usart_rx_queue_head = 0;
+    usart_rx_queue_tail = 0;
+}
+
 task_t usart_rx_task = {
     STATE_INITIAL, // Initial state
     tick,          // Tick function
