@@ -151,14 +151,10 @@ static task_state_t tick(task_state_t state)
             should_poll_readings = true;
             break;
 
-        case STATE_DETECT: {
-            uint8_t room = classify_model(&model, reading_vector);
-            if (room != 0xFF && room != detected_room) {
-                detected_room = room;
-                send_detection_packet(detected_room);
-            }
+        case STATE_DETECT:
+            detected_room = classify_model(&model, reading_vector);
+            send_detection_packet(detected_room);
             break;
-        }            
 
         case STATE_DISCARD_PACKET:
             pop_usart_packet_rx_queue();
