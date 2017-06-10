@@ -1,5 +1,9 @@
 \documentclass{article}
 
+\usepackage{graphicx}
+
+\graphicspath{ {figures/}{photos/} }
+
 \title{Report: Room Detector}
 \author{Jeremiah Griffin}
 \date{Spring 2017}
@@ -33,7 +37,12 @@ moved between any of the trained rooms.  If brought to an untrained
 room, it will make its best guess at classifying the room as one that
 was trained.
 
-% TODO: Insert photo of project
+\begin{figure}[h]
+  \centering
+  \noindent\includegraphics[width = \textwidth]{overview}
+  \caption{Overview photo of project hardware}
+  \label{photo:1}
+\end{figure}
 
 \section{Hardware}
 
