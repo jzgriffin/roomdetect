@@ -1,8 +1,20 @@
 \documentclass{article}
 
+\usepackage{float}
+\usepackage{geometry}
 \usepackage{graphicx}
+\usepackage{pgf}
+\usepackage{tikz}
+
+\geometry{margin=1in}
 
 \graphicspath{ {figures/}{photos/} }
+
+\usetikzlibrary{arrows}
+\usetikzlibrary{automata}
+\usetikzlibrary{fit}
+\usetikzlibrary{positioning}
+\tikzset{initial text={}}
 
 \title{Report: Room Detector}
 \author{Jeremiah Griffin}
@@ -213,6 +225,13 @@ state machines for these tasks are presented in appendix \ref{app.sm}.
 
 \subsection{Master Microcontroller}
 \label{app.sm.master}
+
+\begin{figure}[H]
+  \centering
+  \caption{State machine for master mode task}
+  \input{figures/master_mode_task.tex}
+  \label{sm:1}
+\end{figure}
 
 \subsection{Compute Microcontroller}
 \label{app.sm.compute}

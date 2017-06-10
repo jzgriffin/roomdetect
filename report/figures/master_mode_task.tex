@@ -1,0 +1,34 @@
+\begin{description}
+
+  \item [Input] PA0
+
+  \item [Output] device\_mode: enum
+
+\end{description}
+
+\begin{tikzpicture}[->,>=stealth',
+    shorten >=1pt,
+    node distance=40mm,
+    auto,
+    on grid,
+    semithick]
+
+  \node[state,initial]
+    (Initial) {Initial};
+  \node[state]
+    (Configure) [right=of Initial] {Configure};
+  \node[state,label={[align=left]above:{device\_mode =\\DETECTION}}]
+    (Detection) [right=of Configure] {Detection};
+  \node[state,label={[align=left]above:{device\_mode =\\TRAINING}}]
+    (Training) [right=of Detection] {Training};
+
+  \path[->]
+    (Initial)   edge node {}     (Configure)
+    (Configure) edge node {!PA0} (Detection)
+    (Configure) edge [bend right=90] node [below] {PA0}  (Training)
+    (Detection) edge [loop below] node {!PA0} (Detection)
+    (Detection) edge [bend left] node {PA0}  (Training)
+    (Training)  edge [bend left] node {!PA0} (Detection)
+    (Training)  edge [loop right] node {PA0}  (Training);
+
+\end{tikzpicture}
