@@ -105,8 +105,28 @@ state machines for these tasks are presented in appendix \ref{app.sm}.
 \begin{itemize}
 
   \item Using a neural network to perform input classification using
-    fixed-point arithmetic
-    % TODO: Explain why this was not completed
+    fixed-point arithmetic \\
+    This complexity could not be completed due to hardware limitations.
+    Its role in the project was instead filled by the statistical model
+    listed above.  The intended design for the neural network was a
+    multi-layer feed-forward network, with one input layer of size 4,
+    one hidden layer of size 10 with a linear activation function, one
+    hidden layer of size 10 with a hyperbolic tangent activation
+    function, one hidden layer of size 16 with a linear activation
+    function, and one output layer of size 16 with a softmax activation
+    function.  This topology was chosen as the best for fulfilling the
+    goal of classifying three inputs, with one bias input, into one of
+    16 outputs.  However, this network proved too large for the ATmega
+    to process.  When including the amount of memory necessary for
+    storing training state, the network became too large for storage in
+    the ATmega's 16 kilobyte SRAM.  Additionally, even using fixed-point
+    arithmetic in place of traditional floating point, the times for
+    classification became slower than was considered acceptable and the
+    times for training made it obvious that training would only be
+    possible offline using a faster device, which was deemed to be
+    beyond the scope of this project.  As a result of these limitations,
+    the neural network was replaced with a simpler statistical model at
+    the cost of accuracy and robustness when faced with input noise.
 
 \end{itemize}
 
