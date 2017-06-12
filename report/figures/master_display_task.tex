@@ -20,4 +20,71 @@
 
 \iftoggle{TASKSPECONLY}{}
 {
+\begin{center}
+  \begin{tikzpicture}[->,>=stealth',
+      shorten >=1pt,
+      node distance=41mm,
+      auto,
+      on grid,
+      semithick]
+
+    \node[state,initial]
+      (Initial) {Initial};
+    \node[state]
+      (Configure) [right=of Initial] {Configure};
+    \node[state]
+      (ChangeMode) [right=of Configure] {ChangeMode};
+    \node[state]
+      (DetectionEnter) [below=of Configure] {DetectionEnter};
+    \node[state]
+      (DetectionReady) [left=of DetectionEnter] {DetectionReady};
+    \node[state]
+      (DispNoDetectWait) [below=of DetectionReady] {DispNoDetectWait};
+    \node[state]
+      (DispNoDetect) [below=of DispNoDetectWait] {DispNoDetect};
+    \node[state]
+      (TrainingReady) [below=of ChangeMode] {TrainingReady};
+    \node[state]
+      (TrainingEnter) [right=of TrainingReady] {TrainingEnter};
+    \node[state]
+      (DispSelectWait) [below right of=TrainingReady] {DispSelectWait};
+    \node[state]
+      (DispSelect) [below of=DispSelectWait] {DispSelect};
+    \node[state]
+      (DispTrainWait) [below left of=TrainingReady] {DispTrainWait};
+    \node[state]
+      (DispTrain) [below of=DispTrainWait] {DispTrain};
+
+    \path[->]
+      (Initial) edge node {} (Configure)
+      (Configure) edge node {} (ChangeMode)
+      (ChangeMode) edge [bend right, align=left] node {device\_mode ==\\DETECTION} (DetectionEnter)
+      (ChangeMode) edge [align=left] node {device\_mode ==\\TRAINING} (TrainingEnter)
+      (DetectionEnter) edge [bend left=20] node {} (DispNoDetectWait)
+      (DetectionReady) edge [align=left] node {last\_room !=\\detected\_room} (DispNoDetectWait)
+      (DetectionReady) edge [loop above] node {} (DetectionReady)
+      (DispNoDetect) edge [bend left=45] node {} (DetectionReady)
+      (DispNoDetectWait) edge node {is\_lcd\_ready} (DispNoDetect)
+      (DispNoDetectWait) edge [loop right] node {} (DispNoDetectWait)
+      (TrainingEnter) edge node {} (DispSelectWait)
+      (TrainingReady) edge [bend right=20, align=left] node {training\_room !=\\last\_room} (DispSelectWait)
+      (TrainingReady) edge [bend right=30, align=left] node {is\_training} (DispTrainWait)
+      (TrainingReady) edge [loop right] node {} (TrainingReady)
+      (DispSelect) edge [bend left] node {} (TrainingReady)
+      (DispSelectWait) edge node {is\_lcd\_ready} (DispSelect)
+      (DispSelectWait) edge [loop left] (DispSelectWait)
+      (DispTrain) edge [bend right] node {} (TrainingReady)
+      (DispTrainWait) edge node {is\_lcd\_ready} (DispTrain)
+      (DispTrainWait) edge [loop left] (DispTrainWait);
+
+  \end{tikzpicture}
+\end{center}
+
+The following transitions have been omitted for clarity: from all states
+to the ChangeMode state, under the condition that device\_mode is
+different from the expected mode for the given state.  The
+DispNoDetectWait and DispNoDetect states are duplicated, including
+transitions, for the following similar states: Detect, Save, Reset, and
+Erase.  These redundant states have been omitted for clarity.
+
 }
