@@ -16,4 +16,73 @@
 
 \iftoggle{TASKSPECONLY}{}
 {
+\begin{center}
+  \begin{tikzpicture}[->,>=stealth',
+      shorten >=1pt,
+      node distance=42mm,
+      auto,
+      on grid,
+      semithick]
+
+    \node[state,initial]
+      (Initial) {Initial};
+    \node[state]
+      (Configure) [right=of Initial] {Configure};
+    \node[state]
+      (Standby) [right=of Configure] {Standby};
+    \node[state]
+      (Disabled) [right=of Standby] {Disabled};
+    \node[state]
+      (Enabled) [below=of Initial] {Enabled};
+    \node[state]
+      (Ready) [right=of Enabled] {Ready};
+    \node[state]
+      (Inc) [below=of Ready] {Inc};
+    \node[state]
+      (IncHold) [below=of Inc] {IncHold};
+    \node[state]
+      (Dec) [left=of Inc] {Dec};
+    \node[state]
+      (DecHold) [below=of Dec] {DecHold};
+    \node[state]
+      (Training) [right=of Ready] {Training};
+    \node[state]
+      (Confirm) [below=of Training] {Confirm};
+    \node[state]
+      (ConfirmWait) [below=of Confirm] {ConfirmWait};
+
+    \path[->]
+      (Initial) edge node {} (Configure)
+      (Configure) edge node {} (Standby)
+      (Disabled) edge node {} (Standby)
+      (Standby) edge node {} (Enabled)
+      (Enabled) edge node {} (Ready)
+      (Ready) edge [bend right, align = left] node {PA3} (Dec)
+      (Ready) edge [align = left] node {PA2} (Inc)
+      (Ready) edge [align = left] node {PA1} (ConfirmWait)
+      (Ready) edge [loop above] node {} (Ready)
+      (Inc) edge [bend left, align = left] node {PA2 /\\tick\_count\\= 0} (IncHold)
+      (IncHold) edge [bend left, align = left] node {PA2} (Inc)
+      (IncHold) edge [loop below, align = left] node {PA2 \&\& tick\_count $<$\\BUTTON\_REPEAT\_\\TICKS} (IncHold)
+      (Dec) edge [bend left, align = left] node {PA3 /\\tick\_count\\= 0} (DecHold)
+      (DecHold) edge [bend left, align = left] node {PA3} (Dec)
+      (DecHold) edge [loop below, align = left] node {PA3 \&\& tick\_count $<$\\BUTTON\_REPEAT\_\\TICKS} (DecHold)
+      (ConfirmWait) edge [loop below] node {is\_usart\_tx\_queue\_full()} (ConfirmWait)
+      (ConfirmWait) edge node {} (Confirm)
+      (Confirm) edge node {} (Training)
+      (Training) edge [loop above] node {} (Training);
+
+  \end{tikzpicture}
+\end{center}
+
+The following transitions have been omitted for clarity: from all states
+to the Disabled state, under the condition that device\_mode !=
+TRAINING; and the else-transitions from the Inc, IncHold, Dec, and
+DecHold states to the Ready state.  The transition conditions from the
+Ready state to the Dec, Inc, and ConfirmWait states are also conjoined
+with the condition that PA1 + PA2 + PA3 == 1.  The transition conditions
+from the DecHold and IncHold states to the Dec and Inc states,
+respectively, are also conjoined with the condition that tick\_count ==
+BUTTON\_REPEAT\_TICKS.
+
 }
