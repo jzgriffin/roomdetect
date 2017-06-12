@@ -119,6 +119,94 @@ state machines for these tasks are presented in appendix \ref{app.sm}.
 
 \subsection{Tasks}
 
+\toggletrue{TASKSPECONLY}
+
+\subsubsection{Master Mode Task}
+\input{figures/master_mode_task.tex}
+
+Sets \verb#device_mode# to \verb#DETECTION# if \verb#PA0# is low and to
+\verb#TRAINING# if it's high.  This controls which of the detection and
+training tasks is enabled.
+
+\subsubsection{Master Detection Task}
+\input{figures/master_detection_task.tex}
+
+Operates when \verb#device_mode# is \verb#DETECTION#.  Receives
+detection packets from the compute microcontroller.  Responds to the
+save, reset, and erase buttons by sending the appropriate packets to the
+compute microcontroller to adjust the model.
+
+\subsubsection{Master Training Task}
+\input{figures/master_training_task.tex}
+
+Operates when \verb#device_mode# is \verb#TRAINING#.  Responds to the
+increment, decrement, and confirm buttons by adjusting the training room
+and sending the appropriate packets to the compute microcontroller to
+begin and end training.  Sets \verb#is_training# to true when training.
+
+\subsubsection{Master Display Task}
+\input{figures/master_display_task.tex}
+
+Outputs messages to the LCD according to the current state and detected
+or training room.  Controlled by the detection and training tasks.
+
+\subsubsection{Compute Mode Task}
+\input{figures/compute_mode_task.tex}
+
+Sets \verb#device_mode# to \verb#DETECTION# when a stop-training packet
+is received and to \verb#TRAINING# when a start-training packet is
+received.  Sets \verb#training_room# to the room indicated in the
+start-training packet.
+
+\subsubsection{Compute Reading Task}
+\input{figures/compute_reading_task.tex}
+
+Samples from the analog inputs in sequence when
+\verb#should_poll_readings# is true to create the \verb#reading_vector#.
+Calculates the mean of 16 samples through time to smooth noise.
+Indicates when the reading vector is populated by setting
+\verb#are_readings_ready# to true.
+
+\subsubsection{Compute Detection Task}
+\input{figures/compute_detection_task.tex}
+
+Classifies the current reading vector using the classification model
+when \verb#are_readings_ready# is high and \verb#device_mode# is
+\verb#DETECTION#.  Outputs the classification result to
+\verb#detected_room#.
+
+\subsubsection{Compute Training Task}
+\input{figures/compute_training_task.tex}
+
+Integrates the current reading vector into the classification model when
+\verb#are_readings_ready# is high and \verb#device_mode# is
+\verb#TRAINING#.
+
+\subsubsection{Common LCD Task}
+\input{figures/common_lcd_task.tex}
+
+Clears the LCD when \verb#should_lcd_clear# is true.  Writes the
+contents of \verb#lcd_buffer# to the LCD at \verb#lcd_position# when
+\verb#should_lcd_write# is true.  Sets \verb#is_lcd_ready# to true when
+the current operation is complete.
+
+\subsubsection{Common USART TX Task}
+\input{figures/common_usart_tx_task.tex}
+
+Transmits bytes over USART from the TX queue.
+
+\subsubsection{Common USART RX Task}
+\input{figures/common_usart_rx_task.tex}
+
+Receives bytes from USART into the RX queue.
+
+\subsubsection{Common Packet RX Task}
+\input{figures/common_usart_packet_rx_task.tex}
+
+Identifies and receives packets from the USART RX queue into the packet
+RX queue.  When active, non-packet bytes are discarded from the
+queue--thus only packet communication is possible when scheduled.
+
 \section{Complexities}
 
 \subsection{Complete}
