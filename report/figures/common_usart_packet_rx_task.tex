@@ -7,10 +7,79 @@
       \verb#usart_packet_rx_queue_size: size#;
       \verb#usart_packet_rx_queue_head: size#;
       \verb#usart_packet_rx_queue_tail: size#
+    \item [Locals]
+      \verb#packet: uint8[]#;
+      \verb#size: size#;
+      \verb#target_size: size#;
+      \verb#data_size: size#
     \item [Period] 1 ms
   \end{description}
 \end{flushleft}
 
 \iftoggle{TASKSPECONLY}{}
 {
+\begin{tikzpicture}[->,>=stealth',
+    shorten >=1pt,
+    node distance=40mm,
+    auto,
+    on grid,
+    semithick]
+
+  \node[state,initial]
+    (Initial) {Initial};
+  \node[state]
+    (Reset) [right=of Initial] {Reset};
+  \node[state]
+    (Ready) [right of=Reset] {Ready};
+  \node[state]
+    (WaitHeader) [right of=Ready] {WaitHeader};
+  \node[state]
+    (ReceiveHeader) [below of=WaitHeader] {ReceiveHeader};
+  \node[state]
+    (WaitSize) [left of=ReceiveHeader] {WaitSize};
+  \node[state]
+    (ReceiveSize) [left of=WaitSize] {ReceiveSize};
+  \node[state]
+    (WaitData) [left of=ReceiveSize] {WaitData};
+  \node[state]
+    (ReceiveData) [below of=WaitData] {ReceiveData};
+  \node[state]
+    (WaitChecksum) [right of=ReceiveData] {WaitChecksum};
+  \node[state]
+    (ReceiveChecksum) [right of=WaitChecksum] {ReceiveChecksum};
+  \node[state]
+    (ReceivePacket) [right of=ReceiveChecksum] {ReceivePacket};
+
+  \path[->]
+    (Initial) edge node {} (Reset)
+    (Reset) edge node {} (Ready)
+    (Ready) edge [loop above, align=left] node {is\_\\packet\_rx\_\\queue\_full()} (Ready)
+    (Ready) edge node {} (ReceiveHeader)
+    (WaitHeader) edge node {} (WaitSize)
+    (WaitHeader) edge [loop above] node {is\_rx\_queue\_empty()} (WaitHeader)
+    (WaitHeader) edge [bend left] node {} (ReceiveHeader)
+    (WaitHeader) edge [bend left] node {} (Reset)
+    (ReceiveHeader) edge [bend left] node {} (WaitHeader)
+    (WaitSize) edge [loop above] node {is\_rx\_queue\_empty()} (WaitSize)
+    (WaitSize) edge node {} (ReceiveSize)
+    (ReceiveSize) edge node {} (WaitData)
+    (WaitData) edge node {data\_size == target\_size} (WaitChecksum)
+    (WaitData) edge [loop above] node {is\_rx\_queue\_empty()} (WaitData)
+    (WaitData) edge [bend left] node {} (ReceiveData)
+    (ReceiveData) edge [bend left] node {} (WaitData)
+    (WaitChecksum) edge [bend right=40] node {size\_delta == META\_SIZE} (ReceivePacket)
+    (WaitChecksum) edge [loop below] node {is\_rx\_queue\_empty()} (WaitChecksum)
+    (WaitChecksum) edge [bend left] node {} (ReceiveChecksum)
+    (ReceiveChecksum) edge [bend left] node {} (WaitChecksum)
+    (ReceivePacket) edge [bend left=22] node {} (Reset);
+
+\end{tikzpicture}
+
+The transition from the WaitHeader state to the WaitSize state has the
+condition that size == HEADER\_SIZE.  The transition from the Ready
+state to the ReceiveHeader state has the condition that
+has\_header\_byte(0) is true.  The transition from the WaitHeader state
+to the ReceiveHeader state has the condition that
+has\_header\_byte(size) is true.
+
 }
