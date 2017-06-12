@@ -14,4 +14,72 @@
 
 \iftoggle{TASKSPECONLY}{}
 {
+\begin{center}
+  \begin{tikzpicture}[->,>=stealth',
+      shorten >=1pt,
+      node distance=42mm,
+      auto,
+      on grid,
+      semithick]
+
+    \node[state,initial]
+      (Initial) {Initial};
+    \node[state]
+      (Configure) [right=of Initial] {Configure};
+    \node[state]
+      (Standby) [right=of Configure] {Standby};
+    \node[state]
+      (Disabled) [right=of Standby] {Disabled};
+    \node[state]
+      (Enabled) [below=of Initial] {Enabled};
+    \node[state]
+      (Ready) [right=of Enabled] {Ready};
+    \node[state]
+      (Reset) [below=of Ready] {Reset};
+    \node[state]
+      (ResetHold) [below=of Reset] {ResetHold};
+    \node[state]
+      (Save) [left=of Reset] {Save};
+    \node[state]
+      (SaveHold) [below=of Save] {SaveHold};
+    \node[state]
+      (CheckPacket) [right=of Ready] {CheckPacket};
+    \node[state]
+      (DiscardPacket) [right=of CheckPacket] {DiscardPacket};
+    \node[state]
+      (ReceiveDetection) [below=of DiscardPacket] {ReceiveDetection};
+    \node[state]
+      (Erase) [below=of ReceiveDetection] {Erase};
+    \node[state]
+      (EraseHold) [above left=of Erase] {EraseHold};
+
+    \path[->]
+      (Initial) edge node {} (Configure)
+      (Configure) edge node {} (Standby)
+      (Disabled) edge node {} (Standby)
+      (Standby) edge node {} (Enabled)
+      (Enabled) edge node {} (Ready)
+      (Ready) edge [bend right, align = left] node {PA2 + PA3 == 1\\\&\& PA2} (Save)
+      (Ready) edge [bend left, align = left] node {PA2 + PA3 == 1\\\&\& PA3} (Reset)
+      (Ready) edge [align = left] node {!is\_usart\_\\packet\_rx\_\\queue\_empty()} (CheckPacket)
+      (Ready) edge [loop above] node {} (Ready)
+      (Save) edge node {PA2} (SaveHold)
+      (SaveHold) edge [loop below] node {PA2} (SaveHold)
+      (Reset) edge [align = left] node {PA3 /\\tick\_count = 0} (ResetHold)
+      (ResetHold) edge [align = left] node {PA3 \&\& tick\_count ==\\ERASE\_HOLD\_TICKS} (Erase)
+      (ResetHold) edge [loop below, align = left] node {PA3 \&\& tick\_count $<$\\ERASE\_HOLD\_TICKS} (ResetHold)
+      (Erase) edge node {PA3} (EraseHold)
+      (EraseHold) edge [loop above] node {PA3} (EraseHold)
+      (CheckPacket) edge node {has\_detection\_packet()} (ReceiveDetection)
+      (CheckPacket) edge node {} (DiscardPacket);
+
+  \end{tikzpicture}
+\end{center}
+
+The following transitions have been omitted for clarity: from all states
+to the Disabled state, under the condition that device\_mode !=
+DETECTION; and the else-transitions from the DiscardPacket,
+ReceiveDetection, Save, Reset, Erase, SaveHold, ResetHold, and EraseHold
+states to the Ready state.
+
 }
