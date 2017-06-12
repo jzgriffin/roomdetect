@@ -12,4 +12,61 @@
 
 \iftoggle{TASKSPECONLY}{}
 {
+\begin{center}
+  \begin{tikzpicture}[->,>=stealth',
+      shorten >=1pt,
+      node distance=41mm,
+      auto,
+      on grid,
+      semithick]
+
+    \node[state,initial]
+      (Initial) {Initial};
+    \node[state]
+      (Configure) [right=of Initial] {Configure};
+    \node[state]
+      (Disabled) [right=of Configure] {Disabled};
+    \node[state]
+      (Standby) [right=of Disabled] {Standby};
+    \node[state]
+      (Enabled) [below of=Initial] {Enabled};
+    \node[state]
+      (Ready) [right of=Enabled] {Ready};
+    \node[state]
+      (Detect) [below of=Enabled] {Detect};
+    \node[state]
+      (CheckPacket) [right of=Ready] {CheckPacket};
+    \node[state]
+      (DiscardPacket) [right of=CheckPacket] {DiscardPacket};
+    \node[state]
+      (ReceiveReset) [below of=CheckPacket] {ReceiveReset};
+    \node[state]
+      (ReceiveSave) [left of=ReceiveReset] {ReceiveSave};
+    \node[state]
+      (ReceiveErase) [right of=ReceiveReset] {ReceiveErase};
+
+    \path[->]
+      (Initial) edge node {} (Configure)
+      (Configure) edge node {} (Disabled)
+      (Disabled) edge node {} (Standby)
+      (Standby) edge [loop above] node {} (Standby)
+      (Standby) edge node {} (Enabled)
+      (Enabled) edge node {} (Ready)
+      (Ready) edge [align=left] node {!is\_usart\_\\packet\_rx\_\\queue\_empty()} (CheckPacket)
+      (Ready) edge node {are\_readings\_ready} (Detect)
+      (Ready) edge [loop below] node {} (Ready)
+      (CheckPacket) edge [align=left] node {!is\_packet\_\\good()} (DiscardPacket)
+      (CheckPacket) edge [align=left] node {has\_save\_\\packet()} (ReceiveSave)
+      (CheckPacket) edge [align=left] node {has\_reset\_\\packet()} (ReceiveReset)
+      (CheckPacket) edge [align=left] node {has\_erase\_\\packet()} (ReceiveErase);
+
+  \end{tikzpicture}
+\end{center}
+
+The following transitions have been omitted for clarity: from the
+Detect, DiscardPacket, ReceiveSave, ReceiveReset, and ReceiveErase
+states to the Ready state under any condition; the else-transition from
+the CheckPacket state to the Ready state; and from all states to the
+Disabled state when device\_mode != DETECTION.
+
 }
