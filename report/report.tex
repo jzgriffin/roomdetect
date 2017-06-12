@@ -333,6 +333,10 @@ queue--thus only packet communication is possible when scheduled.
 
 \togglefalse{TASKSPECONLY}
 
+In the following state machines, transitions without conditions should
+be interpreted to be else-transitions unless the state only has one
+outgoing transition, in which case the transition is unconditional.
+
 \subsection{Master Microcontroller}
 \label{app.sm.master}
 
@@ -368,28 +372,24 @@ queue--thus only packet communication is possible when scheduled.
 \label{app.sm.compute}
 
 \begin{figure}[H]
-  \centering
   \caption{State machine for compute mode task}
   \input{figures/compute_mode_task.tex}
   \label{sm:5}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
   \caption{State machine for compute reading task}
   \input{figures/compute_reading_task.tex}
   \label{sm:6}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
   \caption{State machine for compute detection task}
   \input{figures/compute_detection_task.tex}
   \label{sm:7}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
   \caption{State machine for compute training task}
   \input{figures/compute_training_task.tex}
   \label{sm:8}
@@ -399,28 +399,24 @@ queue--thus only packet communication is possible when scheduled.
 \label{app.sm.common}
 
 \begin{figure}[H]
-  \centering
   \caption{State machine for common LCD task}
   \input{figures/common_lcd_task.tex}
   \label{sm:9}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
   \caption{State machine for common USART TX task}
   \input{figures/common_usart_tx_task.tex}
   \label{sm:10}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
   \caption{State machine for common USART RX task}
   \input{figures/common_usart_rx_task.tex}
   \label{sm:11}
 \end{figure}
 
 \begin{figure}[H]
-  \centering
   \caption{State machine for common USART packet RX task}
   \input{figures/common_usart_packet_rx_task.tex}
   \label{sm:12}
