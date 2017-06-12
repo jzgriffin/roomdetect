@@ -13,4 +13,29 @@
 
 \iftoggle{TASKSPECONLY}{}
 {
+\begin{tikzpicture}[->,>=stealth',
+    shorten >=1pt,
+    node distance=40mm,
+    auto,
+    on grid,
+    semithick]
+
+  \node[state,initial]
+    (Initial) {Initial};
+  \node[state]
+    (Configure) [right=of Initial] {Configure};
+  \node[state]
+    (Ready) [right of=Configure] {Ready};
+  \node[state]
+    (Transmit) [right of=Ready] {Transmit};
+
+  \path[->]
+    (Initial) edge node {} (Configure)
+    (Configure) edge node {} (Ready)
+    (Ready) edge [bend left, align=left] node {can\_usart\_tx()\\\&\& !is\_usart\_tx\_\\queue\_empty()} (Transmit)
+    (Ready) edge [loop above] node {} (Ready)
+    (Transmit) edge [loop above, align=left] node {can\_usart\_tx()\\\&\& !is\_usart\_tx\_\\queue\_empty()} (Transmit)
+    (Transmit) edge [bend left] node {} (Ready);
+
+\end{tikzpicture}
 }
