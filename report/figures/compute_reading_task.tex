@@ -15,4 +15,49 @@
 
 \iftoggle{TASKSPECONLY}{}
 {
+\begin{center}
+  \begin{tikzpicture}[->,>=stealth',
+      shorten >=1pt,
+      node distance=41mm,
+      auto,
+      on grid,
+      semithick]
+
+    \node[state,initial]
+      (Initial) {Initial};
+    \node[state]
+      (Configure) [right=of Initial] {Configure};
+    \node[state]
+      (Standby) [right=of Configure] {Standby};
+    \node[state]
+      (Poll) [below of=Standby] {Poll};
+    \node[state]
+      (Start) [below of=Initial] {Start};
+    \node[state]
+      (Wait) [below of=Start] {Wait};
+    \node[state]
+      (Read) [below of=Poll] {Read};
+    \node[state]
+      (Next) [below of=Read] {Next};
+    \node[state]
+      (Output) [below of=Wait] {Output};
+
+    \path[->]
+      (Initial) edge node {} (Configure)
+      (Configure) edge node {} (Standby)
+      (Standby) edge node {should\_poll\_readings} (Poll)
+      (Standby) edge [loop right] node {} (Standby)
+      (Poll) edge node {} (Start)
+      (Start) edge node {} (Wait)
+      (Wait) edge node {is\_adc\_ready()} (Read)
+      (Wait) edge [loop left] node {} (Wait)
+      (Read) edge [align=left] node {index ==\\MODEL\_VECTOR\_SIZE} (Next)
+      (Read) edge node {} (Start)
+      (Next) edge [align=left] node {samples ==\\SAMPLE\_SIZE} (Output)
+      (Next) edge [bend left] node {} (Start)
+      (Output) edge [bend left=20] node {} (Standby);
+
+  \end{tikzpicture}
+\end{center}
+
 }
