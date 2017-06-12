@@ -15,4 +15,39 @@
 
 \iftoggle{TASKSPECONLY}{}
 {
+\begin{tikzpicture}[->,>=stealth',
+    shorten >=1pt,
+    node distance=40mm,
+    auto,
+    on grid,
+    semithick]
+
+  \node[state,initial]
+    (Initial) {Initial};
+  \node[state]
+    (Configure) [right=of Initial] {Configure};
+  \node[state]
+    (Ready) [right of=Configure] {Ready};
+  \node[state]
+    (Clear) [right of=Ready] {Clear};
+  \node[state]
+    (Move) [below of=Clear] {Move};
+  \node[state]
+    (Write) [left of=Move] {Write};
+  \node[state]
+    (Next) [left of=Write, label={index++}] {Next};
+
+  \path[->]
+    (Initial) edge node {} (Configure)
+    (Configure) edge node {} (Ready)
+    (Ready) edge [bend left] node {should\_lcd\_clear} (Clear)
+    (Ready) edge node {should\_lcd\_write / index = 0} (Move)
+    (Ready) edge [loop above] node {} (Ready)
+    (Clear) edge [bend left] node {} (Ready)
+    (Move) edge node {} (Write)
+    (Write) edge node {} (Next)
+    (Next) edge node {lcd\_buffer[index] == 0} (Ready)
+    (Next) edge [bend right] node {} (Move);
+
+\end{tikzpicture}
 }
