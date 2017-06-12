@@ -10,4 +10,43 @@
 
 \iftoggle{TASKSPECONLY}{}
 {
+\begin{center}
+  \begin{tikzpicture}[->,>=stealth',
+      shorten >=1pt,
+      node distance=41mm,
+      auto,
+      on grid,
+      semithick]
+
+    \node[state,initial]
+      (Initial) {Initial};
+    \node[state]
+      (Configure) [right=of Initial] {Configure};
+    \node[state]
+      (Ready) [right=of Configure] {Ready};
+    \node[state]
+      (CheckPacket) [below of=Ready] {CheckPacket};
+    \node[state]
+      (DiscardPacket) [below of=Initial] {DiscardPacket};
+    \node[state]
+      (ReceiveDetection) [below of=CheckPacket] {ReceiveDetection};
+    \node[state]
+      (ReceiveTraining) [below of=DiscardPacket] {ReceiveTraining};
+
+    \path[->]
+      (Initial) edge node {} (Configure)
+      (Configure) edge node {} (Ready)
+      (Ready) edge [align=left] node {!is\_usart\_\\packet\_rx\_\\queue\_empty()} (CheckPacket)
+      (Ready) edge [loop right] node {} (Ready)
+      (CheckPacket) edge node {!is\_packet\_good()} (DiscardPacket)
+      (CheckPacket) edge node {has\_detection\_packet()} (ReceiveDetection)
+      (CheckPacket) edge node {has\_training\_packet()} (ReceiveTraining);
+
+  \end{tikzpicture}
+\end{center}
+
+The following transitions have been omitted for clarity: from the
+DiscardPacket, ReceiveDetection, and ReceiveTraining states to the Ready
+state under any condition.
+
 }
