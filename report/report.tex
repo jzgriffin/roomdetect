@@ -91,7 +91,19 @@ listed in bold.
 The software designed for this project was implemented using the PES
 standard.  The overall design as a task diagram is included below.
 
-% TODO: Insert task diagram
+\begin{figure}[H]
+  \centering
+  \noindent\includegraphics[width = \textwidth]{task_diagram}
+  \caption{Task diagram for project}
+  \label{task:1}
+\end{figure}
+
+The master and compute tasks run on their respective microcontrollers.
+The common tasks run independently on both microcontrollers, being part
+of a static library linked to by both microcontroller applications and
+instantiated in their task schedulers.  The inputs and outputs for the
+common LCD, USART TX, USART RX, and packet RX tasks were excluded from
+this diagram for brevity but are documented in their task descriptions.
 
 In the following sections, the individual tasks from the above diagram
 are briefly described in addition to their inputs and outputs.  The
