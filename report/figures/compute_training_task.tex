@@ -12,4 +12,44 @@
 
 \iftoggle{TASKSPECONLY}{}
 {
+\begin{center}
+  \begin{tikzpicture}[->,>=stealth',
+      shorten >=1pt,
+      node distance=41mm,
+      auto,
+      on grid,
+      semithick]
+
+    \node[state,initial]
+      (Initial) {Initial};
+    \node[state]
+      (Configure) [right=of Initial] {Configure};
+    \node[state]
+      (Disabled) [right=of Configure] {Disabled};
+    \node[state]
+      (Standby) [right=of Disabled] {Standby};
+    \node[state]
+      (Enabled) [below of=Standby] {Enabled};
+    \node[state]
+      (Ready) [left of=Enabled] {Ready};
+    \node[state]
+      (Train) [left of=Ready] {Train};
+
+    \path[->]
+      (Initial) edge node {} (Configure)
+      (Configure) edge node {} (Disabled)
+      (Disabled) edge node {} (Standby)
+      (Standby) edge [loop above] node {} (Standby)
+      (Standby) edge node {} (Enabled)
+      (Enabled) edge node {} (Ready)
+      (Ready) edge [bend left] node {are\_readings\_ready} (Train)
+      (Ready) edge [loop below] node {} (Ready)
+      (Train) edge [bend left] node {} (Ready);
+
+  \end{tikzpicture}
+\end{center}
+
+The following transitions have been omitted for clarity:  from all
+states to the Disabled state when device\_mode != TRAINING.
+
 }
