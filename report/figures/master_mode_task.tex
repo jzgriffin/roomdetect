@@ -7,6 +7,8 @@
   \end{description}
 \end{flushleft}
 
+\iftoggle{TASKSPECONLY}{}
+{
 \begin{tikzpicture}[->,>=stealth',
     shorten >=1pt,
     node distance=40mm,
@@ -33,3 +35,4 @@
     (Training)  edge [loop right] node {PA0}  (Training);
 
 \end{tikzpicture}
+}

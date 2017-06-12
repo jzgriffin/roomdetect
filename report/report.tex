@@ -1,10 +1,13 @@
 \documentclass{article}
 
+\usepackage{etoolbox}
 \usepackage{float}
 \usepackage{geometry}
 \usepackage{graphicx}
 \usepackage{pgf}
 \usepackage{tikz}
+
+\newtoggle{TASKSPECONLY}
 
 \geometry{margin=1in}
 
@@ -239,6 +242,8 @@ state machines for these tasks are presented in appendix \ref{app.sm}.
 
 \section{Appendix: State Machines}
 \label{app.sm}
+
+\togglefalse{TASKSPECONLY}
 
 \subsection{Master Microcontroller}
 \label{app.sm.master}
